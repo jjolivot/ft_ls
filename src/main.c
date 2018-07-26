@@ -6,7 +6,7 @@
 /*   By: jjolivot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 22:57:13 by jjolivot          #+#    #+#             */
-/*   Updated: 2018/07/23 19:42:29 by jjolivot         ###   ########.fr       */
+/*   Updated: 2018/07/25 20:23:42 by jjolivot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,25 @@ int	main(int argc, char **argv)
 	i = 0;
 	if (ft_flags(argc, argv, &flags) == -1)
 		return (-1);
-/*
-	if (argc == 1 && argv[1][0] == '-')
+
+//	if (argc == 1)
+//		ft_ls(".", flags);
+	if (argc == 2 && argv[1][0] == '-')
 		ft_ls(".", flags);
-	else if (argc == 1 && argv[1][0] != '-')
+	else if (argc == 2 && argv[1][0] != '-')
 		ft_ls(argv[1], flags);
-	else if (argc == 2 && argv[1][0] == '-')
+	else if (argc == 3 && argv[1][0] == '-')
 		ft_ls(argv[2], flags);
-	else while (argv[++i] && argv[i][0] != '-')
+	else while (argv[++i])
 	{
+		if (i == 1 && argv[1][0] == '-')
+			i++;
 		ft_putstr(argv[i]);
 		ft_putstr(":\n");
 		ft_ls(argv[i], flags);
 	}
-*/
-	ft_ls("tests", flags);
+/**/
+//	ft_ls("tests", flags);
 	free(flags);
 	return (0);
 }

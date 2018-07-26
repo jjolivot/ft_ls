@@ -6,7 +6,7 @@
 #    By: jjolivot <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/22 22:52:53 by jjolivot          #+#    #+#              #
-#    Updated: 2018/07/23 17:36:00 by jjolivot         ###   ########.fr        #
+#    Updated: 2018/07/25 20:06:33 by jjolivot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 LIB = includes/libft/libft.a
 
-SRC = src/main.c src/ft_ls.c src/ft_inspect_file.c
+SRC = src/main.c src/ft_ls.c src/ft_inspect_file.c src/ft_sort.c
 
 INC = includes/ls.h
 

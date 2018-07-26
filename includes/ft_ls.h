@@ -6,7 +6,7 @@
 /*   By: jjolivot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 23:14:49 by jjolivot          #+#    #+#             */
-/*   Updated: 2018/07/23 17:30:47 by jjolivot         ###   ########.fr       */
+/*   Updated: 2018/07/25 20:05:41 by jjolivot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ typedef struct	s_pn
 	struct s_pn	*next;
 }				t_pn;
 
-int		ft_ls(char *dirname, char flags[5]);
-char	*ft_inspect_file(char *filepath, char *filename, time_t *modif_time);
+struct s_pn	*ft_sort(struct s_pn *maillon, char *flags);
+int			ft_ls(char *dirname, char flags[5]);
+char		*ft_inspect_file(char *filepath, char *filename, time_t *modif_time);
 
 #endif

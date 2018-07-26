@@ -6,7 +6,7 @@
 /*   By: jjolivot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/23 16:01:24 by jjolivot          #+#    #+#             */
-/*   Updated: 2018/07/23 20:02:48 by jjolivot         ###   ########.fr       */
+/*   Updated: 2018/07/26 02:13:44 by jjolivot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,14 @@ struct s_pn	*ft_dir_to_list(char *dirname, char flags[5])
 	return (list);
 }
 
+
 void	ft_list_to_screen(struct s_pn *maillon, char *flags)
 {
 	while (maillon->prev)
 		maillon = maillon->prev;
-	while (maillon->next != NULL)
+	if (flags[4] == 't')
+		maillon = ft_sort(maillon, flags);
+	while (maillon)
 	{
 		if (flags[1] == 'l')
 		{
