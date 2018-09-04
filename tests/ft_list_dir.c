@@ -6,7 +6,7 @@
 /*   By: jjolivot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 15:42:00 by jjolivot          #+#    #+#             */
-/*   Updated: 2018/07/22 22:49:05 by jjolivot         ###   ########.fr       */
+/*   Updated: 2018/08/01 03:30:24 by jjolivot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int	main(int argc, char **argv)
 //	struct s_pn *list;
 
 	argc = 1;
-	ft_ls(argv[1], argv[2][0]);
+	ft_dir_to_list(argv[1]);
 //	list = ft_dir_to_list(argv[1]);
 //	ft_list_to_screen(list, argv[2][0]);
 	while (1);

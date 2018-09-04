@@ -6,7 +6,7 @@
 /*   By: jjolivot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/25 19:42:41 by jjolivot          #+#    #+#             */
-/*   Updated: 2018/07/26 02:14:12 by jjolivot         ###   ########.fr       */
+/*   Updated: 2018/08/29 20:05:50 by jjolivot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,29 @@ int	ft_count(struct s_pn *maillon)
 	return (i);
 }
 
+struct s_pn *ft_alpha_sort(struct s_pn *maillon, struct s_pn *first)
+{
+	struct s_pn *tmp;
+
+	if (maillon->prev)
+		maillon->prev->next = maillon->next;
+	if(maillon->next->next)
+		maillon->next->next->prev = maillon;
+	maillon->next->prev = maillon->prev;
+	maillon->prev = maillon->next;
+	tmp = maillon->next->next;
+	maillon->next->next = maillon;
+	maillon->next = tmp;
+	while (first->prev)
+		first = first->prev;
+	maillon = first;
+		return (maillon);
+}
+
 struct s_pn *ft_flags_sort(struct s_pn *maillon, struct s_pn *midmaillon, char *flags)
 {
 	struct s_pn *tmp;
+
 	if (flags[4] == 't')
 	{
 		if (maillon->modif_time < midmaillon->modif_time)
@@ -47,10 +67,13 @@ struct s_pn *ft_flags_sort(struct s_pn *maillon, struct s_pn *midmaillon, char *
 			midmaillon->prev = maillon;
 		}
 	}
+	else
+//		maillon = ft_alpha_sort(maillon, midmaillon);
 	while (maillon->prev)
 		maillon = maillon->prev;
 	return (maillon);
 }
+
 
 /*struct s_pn *ft_sort(struct s_pn *maillon, char *flags)
 {
@@ -76,6 +99,22 @@ struct s_pn *ft_flags_sort(struct s_pn *maillon, struct s_pn *midmaillon, char *
 	return (maillon);
 }*/
 
+struct s_pn	*ft_invert_list(struct s_pn *maillon)
+{
+	struct s_pn *tmp;
+	int i;
+
+	i = 0;
+	while (maillon->prev || i++ == 0)
+	{
+		tmp = maillon->next;
+		maillon->next = maillon->prev;
+		maillon->prev = tmp;
+		if (tmp)
+			maillon = tmp;
+	}
+	return (maillon);
+}
 
 struct s_pn *ft_sort(struct s_pn *maillon, char *flags)
 {
@@ -86,9 +125,13 @@ struct s_pn *ft_sort(struct s_pn *maillon, char *flags)
 	first = maillon;
 		while (maillon->next)
 		{
-			if (maillon->next && maillon->modif_time < maillon->next->modif_time && flags[4] == 't')
+//			printf("%s\n", maillon->filename);
+			if ((maillon->modif_time <
+			maillon->next->modif_time && flags[4] == 't'))/* ||
+			((!ft_is_alpha_sort(maillon->filename, maillon->next->filename) && flags[4] != 't')))*/
 			{
-				maillon->prev->next = maillon->next;
+				if (maillon->prev)
+					maillon->prev->next = maillon->next;
 				if(maillon->next->next)
 					maillon->next->next->prev = maillon;
 				maillon->next->prev = maillon->prev;
@@ -100,9 +143,14 @@ struct s_pn *ft_sort(struct s_pn *maillon, char *flags)
 					first = first->prev;
 				maillon = first;
 			}
+			if (flags[4] != 't' && ft_strcmp(maillon->filename, maillon->next->filename) > 0)
+				maillon = ft_alpha_sort(maillon, first);
+//			printf("%s\n", maillon->filename);
 			maillon = maillon->next;
 		}
 	maillon = first;
+	if (flags[2] == 'r')
+		maillon = ft_invert_list(maillon);
 	return (maillon);
 }
 

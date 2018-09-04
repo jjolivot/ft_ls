@@ -6,7 +6,7 @@
 /*   By: jjolivot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 16:09:05 by jjolivot          #+#    #+#             */
-/*   Updated: 2018/07/23 17:56:41 by jjolivot         ###   ########.fr       */
+/*   Updated: 2018/08/29 16:14:48 by jjolivot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ char	*ft_mod_convert(int mod)
 	char	*str;
 	int		place;
 
-	str = (char *)malloc(sizeof(char) * 10 + 1);
+	if (!(str = (char *)malloc(sizeof(char) * 10 + 1)))
+		exit(0);;
 	str[10] = '\0';
 	place = 10;
 	mod = ft_permissions(&(str[0]), place, mod);
@@ -101,11 +102,13 @@ char	*ft_inspect_file(char *filepath, char *filename, time_t *modif_time)
 	struct	group *grp;
 	struct	passwd *passwd;
 	char	*ext_print;
+	char	*tmp; // Au pire, il reste un argument
 
 	file = 0;
-	file = (struct stat *)malloc(sizeof(struct stat));
+	if (!(file = (struct stat *)malloc(sizeof(struct stat))))
+		exit(0);
 	//prend les stat
-	stat(filepath, file);
+	lstat(filepath, file);
 	// prends les infos de groupe (dont le nom)
 	grp = getgrgid(file->st_gid);
 	// prend les infos d'utilisateur (dans passwd) (dont le nom d'user)
@@ -114,8 +117,8 @@ char	*ft_inspect_file(char *filepath, char *filename, time_t *modif_time)
 	ext_print = ft_mod_convert(ft_10_to_8(file->st_mode));
 	ext_print = ft_f_strjoin(ext_print, "\t");
 	// number of links
-	ext_print = ft_f_strjoin(ext_print, (filepath = ft_itoa(file->st_nlink)));
-	free(filepath);
+	ext_print = ft_f_strjoin(ext_print, (tmp = ft_itoa(file->st_nlink)));
+	free(tmp);
 	//ft_putnbr(file->st_nlink);
 	ext_print = ft_f_strjoin(ext_print, "\t");
 	// Owner name
@@ -125,16 +128,26 @@ char	*ft_inspect_file(char *filepath, char *filename, time_t *modif_time)
 	ext_print = ft_f_strjoin(ext_print, grp->gr_name);
 	ext_print = ft_f_strjoin(ext_print, "\t");
 	// number of bytes
-	ext_print = ft_f_strjoin(ext_print, (filepath = ft_itoa(file->st_blocks)));
-	free(filepath);
+	ext_print = ft_f_strjoin(ext_print, (tmp = ft_itoa(file->st_size)));
+	free(tmp);
 	ext_print = ft_f_strjoin(ext_print, "\t");
 	// date of modif
-	ext_print = ft_f_strjoin(ext_print, (filepath = ft_time_display(file->st_mtimespec.tv_sec)));
-	free(filepath);
-	*modif_time = file->st_mtimespec.tv_sec;
+	ext_print = ft_f_strjoin(ext_print, (tmp = ft_time_display(file->st_mtimespec.tv_sec)));
+	free(tmp);
+	if (modif_time)
+		*modif_time = file->st_mtimespec.tv_sec;
 	ext_print = ft_f_strjoin(ext_print, "\t");
 	// file name
 	ext_print = ft_f_strjoin(ext_print, filename);
+	if (ext_print[0] == 'l')
+	{
+		ext_print = ft_f_strjoin(ext_print, " -> ");
+		if (!(tmp = (char *)malloc(sizeof(char) * 4096 + 1)))
+				exit(0);
+		tmp[readlink(filepath, tmp, 4096)] = '\0';
+		ext_print = ft_f_strjoin(ext_print, tmp);
+		free(tmp);
+	}
 	free(file);
 	file = NULL;
 	return (ext_print);

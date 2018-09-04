@@ -6,7 +6,7 @@
 /*   By: jjolivot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 22:57:13 by jjolivot          #+#    #+#             */
-/*   Updated: 2018/07/25 20:23:42 by jjolivot         ###   ########.fr       */
+/*   Updated: 2018/09/01 20:11:38 by jjolivot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,37 @@ int	ft_flags(int argc, char **argv, char **flags)
 	return (0);
 }
 
+int	ft_empty_arg(int argc, char **argv)
+{
+	int i;
+
+	i = 0;
+	while (++i < argc)
+		if (!ft_strlen(argv[i]))
+		{
+			ft_putstr("ls: fts_open: No such file or directory\n");
+			return (1);
+		}
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	char *flags;
 	int i;
 
-	flags = (char *)malloc(sizeof(char) * 5);
+	if (ft_empty_arg(argc, argv))
+		return (0);
+	if (!(flags = (char *)malloc(sizeof(char) * 6)))
+			return (-1);
+	flags[0] = 0;
+	flags[1] = 0;
+	flags[2] = 0;
+	flags[3] = 0;
+	flags[4] = 0;
 	i = 0;
 	if (ft_flags(argc, argv, &flags) == -1)
 		return (-1);
-
 //	if (argc == 1)
 //		ft_ls(".", flags);
 	if (argc == 2 && argv[1][0] == '-')
@@ -67,9 +88,12 @@ int	main(int argc, char **argv)
 	{
 		if (i == 1 && argv[1][0] == '-')
 			i++;
-		ft_putstr(argv[i]);
-		ft_putstr(":\n");
-		ft_ls(argv[i], flags);
+		if (ft_check_permission(argv[i]) == 2)
+		{
+			ft_putstr(argv[i]);
+			ft_putstr(":\n");
+			ft_ls(argv[i], flags);
+		}
 	}
 /**/
 //	ft_ls("tests", flags);
